@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -105,7 +106,39 @@ class MainActivity2 : AppCompatActivity() {
             lista[i][2] = res.getJSONObject(i).getString("value")
             lista[i][3] = res.getJSONObject(i).getString("date")
         }
-        rvList.adapter = MyAdapter(lista)
+        rvList.adapter = MyAdapter(lista, object : MyListener{
+            override fun onClickEdit(posicion: Int) {
+                //editar()
+                Toast.makeText(this@MainActivity2,"posicion:"+posicion+" id:"+lista[posicion][0],
+                    Toast.LENGTH_LONG).show()
+            }
+
+            override fun onClickDel(posicion: Int) {
+                eliminar(lista[posicion][0]);
+            }
+        })
     }
 
+    private fun eliminar(id: String?) {
+        val url = Uri.parse("http://172.18.0.2/sensores/"+id)
+            .buildUpon()
+            .build().toString()
+
+        val peticion = object: StringRequest(
+            Request.Method.DELETE, url,
+            {
+                Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show()
+            },
+            {
+                Toast.makeText(this, "Error en la peticion", Toast.LENGTH_SHORT).show()
+            }){
+            override fun getHeaders(): MutableMap<String, String> {
+                val header: MutableMap<String, String> = HashMap()
+                header["Authorization"] = "Bearer " + sesion.getString("token", "")
+                return header
+            }
+        }
+
+        MySingleton.getInstance(applicationContext).addToRequestQueue(peticion)
+    }
 }

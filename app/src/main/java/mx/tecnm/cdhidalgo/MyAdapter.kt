@@ -3,22 +3,29 @@ package mx.tecnm.cdhidalgo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val datos: Array<Array<String?>>):
+class MyAdapter(private val datos: Array<Array<String?>>, private val myListener: MyListener):
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    class ViewHolder(itemSensor: View): RecyclerView.ViewHolder(itemSensor) {
+    inner class ViewHolder(itemSensor: View): RecyclerView.ViewHolder(itemSensor) {
         lateinit var tvId: TextView
         lateinit var tvSensor: TextView
         lateinit var tvValor: TextView
         lateinit var tvFecha: TextView
+        lateinit var bEdit: ImageView
+        lateinit var bDel: ImageView
         init {
             tvId = itemSensor.findViewById(R.id.tvId)
             tvSensor = itemSensor.findViewById(R.id.tvSensor)
             tvValor = itemSensor.findViewById(R.id.tvValor)
             tvFecha = itemSensor.findViewById(R.id.tvFecha)
+            bEdit = itemSensor.findViewById(R.id.bEdit)
+            bDel = itemSensor.findViewById(R.id.bDel)
+            bEdit.setOnClickListener { myListener.onClickEdit(adapterPosition) }
+            bDel.setOnClickListener { myListener.onClickDel(adapterPosition) }
         }
     }
 
