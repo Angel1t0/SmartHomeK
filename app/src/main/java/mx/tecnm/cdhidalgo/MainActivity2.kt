@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -124,8 +123,8 @@ class MainActivity2 : AppCompatActivity() {
             .buildUpon()
             .build().toString()
 
-        val peticion = object: StringRequest(
-            Request.Method.DELETE, url,
+        val peticion = object: JsonObjectRequest(
+            Request.Method.DELETE, url, null,
             {
                 Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show()
             },
