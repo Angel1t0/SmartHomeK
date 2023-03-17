@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 private fun login() {
-        val url = Uri.parse("http://172.18.0.2/login")
+        val url = Uri.parse(Config.URL+"login")
             .buildUpon()
             .build().toString()
 

@@ -1,5 +1,6 @@
 package mx.tecnm.cdhidalgo
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -49,7 +50,7 @@ class MainActivity2 : AppCompatActivity() {
     }
 
     private fun agregar() {
-        val url = Uri.parse("http://172.18.0.2/sensores")
+        val url = Uri.parse(Config.URL+"sensores")
             .buildUpon()
             .build().toString()
 
@@ -76,7 +77,7 @@ class MainActivity2 : AppCompatActivity() {
     }
 
     private fun llenar() {
-        val url = Uri.parse("http://172.18.0.2/sensores")
+        val url = Uri.parse(Config.URL+"sensores")
             .buildUpon()
             .build().toString()
         val peticion = object: JsonArrayRequest(Method.GET, url, null,
@@ -107,7 +108,7 @@ class MainActivity2 : AppCompatActivity() {
         }
         rvList.adapter = MyAdapter(lista, object : MyListener{
             override fun onClickEdit(posicion: Int) {
-                //editar()
+                editar(lista[posicion][0], lista[posicion][1], lista[posicion][2])
                 Toast.makeText(this@MainActivity2,"posicion:"+posicion+" id:"+lista[posicion][0],
                     Toast.LENGTH_LONG).show()
             }
@@ -118,8 +119,18 @@ class MainActivity2 : AppCompatActivity() {
         })
     }
 
+    private fun editar(id: String?, sensor: String?, valor: String?) {
+        val extras = Bundle()
+        extras.putString("id", id)
+        extras.putString("sensor", sensor)
+        extras.putString("valor", valor)
+        val i = Intent(this, MainActivity3::class.java)
+        i.putExtras(extras)
+        startActivity(i)
+    }
+
     private fun eliminar(id: String?) {
-        val url = Uri.parse("http://172.18.0.2/sensores/"+id)
+        val url = Uri.parse(Config.URL+"sensores/"+id)
             .buildUpon()
             .build().toString()
 
